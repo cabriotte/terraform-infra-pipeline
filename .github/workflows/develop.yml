@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   terraform:
-    uses: ./.github/Workflows/terraform.yml
+    uses: ./.github/workflows/terraform.yml
     with:
       environment: dev
       aws-assume-role-arn: "arn:aws:iam::196724157578:role/github-actions-cabriotte-pipeline"
