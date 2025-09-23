@@ -1,0 +1,20 @@
+name: "DEV DEPLOY"
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    uses: ./.github/Workflows/terraform.yml
+    with:
+      environment: dev
+      aws-assume-role-arn: "arn:aws:iam::196724157578:role/github-actions-cabriotte-pipeline"
+      aws-region: "sa-east-1"
+      aws-statefile-s3-bucket: "challenge2-terraform-statefile"
+      aws-lock-dynamodb-table: "challenge2-terraform-lock"
