@@ -39,15 +39,3 @@ resource "aws_lambda_function" "challenge2-lambda-s3-process-files" {
   filename         = "lambda_function_payload.zip"
   source_code_hash = filebase64sha256("lambda_function_payload.zip")
 }
-
-# Notificação do bucket S3 para Lambda
-resource "aws_s3_bucket_notification" "bucket_notify" {
-  bucket = var.bucket
-
-  lambda_function {
-    lambda_function_arn = aws_lambda_function.challenge2-lambda-s3-process-files.arn
-    events              = ["s3:ObjectCreated:*"]
-  }
-
-  depends_on = [aws_lambda_permission.allow_s3]
-}
