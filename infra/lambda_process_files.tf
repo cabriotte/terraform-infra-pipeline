@@ -37,5 +37,5 @@ resource "aws_lambda_function" "challenge2-lambda-s3-process-files" {
   runtime       = "python3.9"
 
   filename         = "lambda_function_payload.zip"
-  source_code_hash = filebase64sha256("infra\lambda_function_payload.zip")
+  source_code_hash = filebase64sha256("infra/lambda_function_payload.zip")
 }
