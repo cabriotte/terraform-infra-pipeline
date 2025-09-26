@@ -40,15 +40,6 @@ resource "aws_lambda_function" "challenge2-lambda-s3-process-files" {
   source_code_hash = filebase64sha256("lambda_function_payload.zip")
 }
 
-# Permissão para o S3 invocar a Lambda
-resource "aws_lambda_permission" "allow_s3" {
-  statement_id  = "AllowS3Invoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.challenge2-lambda-s3-process-files.function_name
-  principal     = "s3.amazonaws.com"
-  source_arn    = "arn:aws:s3:::dev-challenge2-files"
-}
-
 # Notificação do bucket S3 para Lambda
 resource "aws_s3_bucket_notification" "bucket_notify" {
   bucket = var.bucket
