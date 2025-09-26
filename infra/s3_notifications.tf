@@ -7,7 +7,7 @@ resource "aws_lambda_permission" "allow_s3" {
 }
 
 resource "aws_s3_bucket_notification" "bucket_notify" {
-    bucket = var.bucket
+    bucket = var.bucket_name
 
     lambda_function {
         lambda_function_arn = aws_lambda_function.challenge2-lambda-s3-process-files.arn
