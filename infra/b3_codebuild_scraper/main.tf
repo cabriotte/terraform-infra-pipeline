@@ -26,19 +26,39 @@ resource "aws_codebuild_project" "scraper" {
   }
 }
 
-resource "aws_iam_role_policy" "codebuild_s3_access" {
-  name = "codebuild_s3_access"
+resource "aws_iam_role_policy" "codebuild_permissions" {
+  name = "codebuild_full_permissions"
   role = var.role_name
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
+        Sid    = "CodeBuildCoreAccess",
+        Effect = "Allow",
+        Action = [
+          "codebuild:CreateReportGroup",
+          "codebuild:CreateReport",
+          "codebuild:UpdateReport",
+          "codebuild:BatchPutTestCases",
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "cloudwatch:PutMetricData"
+        ],
+        Resource = "*"
+      },
+      {
+        Sid    = "S3AccessForArtifacts",
         Effect = "Allow",
         Action = [
           "s3:PutObject",
-          "s3:GetObject"
+          "s3:GetObject",
+          "s3:ListBucket"
         ],
-        Resource = "${var.bucket_arn}/*"
+        Resource = [
+          "${var.bucket_arn}",
+          "${var.bucket_arn}/*"
+        ]
       }
     ]
   })
