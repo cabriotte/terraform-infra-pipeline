@@ -18,6 +18,10 @@ variable "role_name" {
   type = string
 }
 
+variable "role_arn" {
+  type = string
+}
+
 variable "project_name" {
   type = string
 }

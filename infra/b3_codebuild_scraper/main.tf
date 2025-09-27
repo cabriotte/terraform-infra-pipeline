@@ -1,7 +1,7 @@
 resource "aws_codebuild_project" "scraper" {
   name         = var.project_name
   description  = "Projeto de scraping da B3"
-  service_role = var.role_name
+  service_role = var.role_arn
 
   source {
     type      = "GITHUB"
