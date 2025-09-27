@@ -5,11 +5,21 @@ phases:
     runtime-versions:
       python: 3.9
     commands:
+      - echo "Instalando dependências Python..."
       - pip install -r requirements.txt
-      - apt-get update && apt-get install -y wget unzip curl gnupg chromium-driver chromium-browser
-      - export CHROME_BIN=/usr/bin/chromium-browser
-      - export PATH=$PATH:/usr/lib/chromium-browser/
+
+      - echo "Instalando Chrome e ChromeDriver..."
+      - curl -O https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      - apt-get update && apt-get install -y ./google-chrome-stable_current_amd64.deb
+      - CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)
+      - wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}/chromedriver_linux64.zip || true
+      - unzip chromedriver_linux64.zip -d /usr/local/bin/
+      - chmod +x /usr/local/bin/chromedriver
+
+      - export CHROME_BIN=/usr/bin/google-chrome
+      - export PATH=$PATH:/usr/local/bin
 
   build:
     commands:
+      - echo "Executando scraper..."
       - python scraper.py

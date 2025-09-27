@@ -14,7 +14,10 @@ def baixar_csv_com_selenium(destino_dir="/tmp/dados_b3"):
     os.makedirs(destino_dir, exist_ok=True)
 
     options = Options()
+    options.binary_location = os.getenv("CHROME_BIN", "/usr/bin/google-chrome")
     options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     prefs = {"download.default_directory": os.path.abspath(destino_dir)}
     options.add_experimental_option("prefs", prefs)
 
@@ -28,7 +31,6 @@ def baixar_csv_com_selenium(destino_dir="/tmp/dados_b3"):
     time.sleep(5)  # aguarda download
     driver.quit()
 
-    # encontra o arquivo CSV baixado
     for file in os.listdir(destino_dir):
         if file.endswith(".csv"):
             caminho_csv = os.path.join(destino_dir, file)
@@ -38,7 +40,6 @@ def baixar_csv_com_selenium(destino_dir="/tmp/dados_b3"):
     raise FileNotFoundError("CSV não foi baixado.")
 
 def processar_csv_para_parquet(caminho_csv, destino_base="/tmp/dados_b3"):
-    # Lê o CSV ignorando a primeira linha (título)
     df = pd.read_csv(
         caminho_csv,
         sep=";",
@@ -49,13 +50,9 @@ def processar_csv_para_parquet(caminho_csv, destino_base="/tmp/dados_b3"):
         on_bad_lines="skip"
     )
 
-    # Remove linhas não relacionadas à tabela principal
     df = df[df["Código"].notna() & ~df["Código"].str.contains("Quantidade|Redutor", na=False)]
-
-    # Adiciona partição por data
     df["data_extracao"] = datetime.today().strftime("%Y-%m-%d")
 
-    # Salva em Parquet com partição
     destino_particao = os.path.join(destino_base, f"data_extracao={df['data_extracao'].iloc[0]}")
     os.makedirs(destino_particao, exist_ok=True)
     caminho_parquet = os.path.join(destino_particao, "pregao.parquet")
@@ -64,10 +61,7 @@ def processar_csv_para_parquet(caminho_csv, destino_base="/tmp/dados_b3"):
     print(f"Parquet salvo em: {caminho_parquet}")
     return destino_particao
 
-
 def upload_to_s3(local_path, bucket_name, s3_prefix):
-    # s3 = boto3.client('s3')
-    #Mockei pra teste mas n é o ideal por segurança
     s3 = boto3.client('s3')
 
     for root, dirs, files in os.walk(local_path):
@@ -80,14 +74,12 @@ def upload_to_s3(local_path, bucket_name, s3_prefix):
 
 def run_pipeline():
     print("Iniciando pipeline B3...")
+    bucket_name = os.getenv("BUCKET_NAME", "meu-bucket-b3-academy")
     caminho_csv = baixar_csv_com_selenium()
     caminho_parquet = processar_csv_para_parquet(caminho_csv)
-    upload_to_s3(caminho_parquet, bucket_name="meu-bucket-b3-academy", s3_prefix="b3/pregao")
+    upload_to_s3(caminho_parquet, bucket_name=bucket_name, s3_prefix="b3/pregao")
     print("Pipeline finalizado com sucesso.")
 
 if __name__ == "__main__":
     run_pipeline()
 
-def lambda_handler(event, context):
-    run_pipeline()
-    return {"status": "ok"}
