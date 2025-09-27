@@ -1,0 +1,4 @@
+selenium
+pandas
+pyarrow
+boto3

@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - pip install -r requirements.txt
+      - apt-get update && apt-get install -y wget unzip curl gnupg chromium-driver chromium-browser
+      - export CHROME_BIN=/usr/bin/chromium-browser
+      - export PATH=$PATH:/usr/lib/chromium-browser/
+
+  build:
+    commands:
+      - python scraper.py
