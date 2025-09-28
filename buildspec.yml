@@ -7,39 +7,22 @@ phases:
     commands:
       - echo "Instalando dependências..."
       - pip install -r requirements.txt
+
       - echo "Instalando Google Chrome..."
       - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
       - apt update && apt install -y ./google-chrome-stable_current_amd64.deb
-      - echo "Detectando versão do Chrome e instalando ChromeDriver..."
-      - which google-chrome
-      - google-chrome --version || echo "Chrome não está disponível"
-      - |
-        bash -c '
-        set -e
-        echo "Detectando versão do Chrome..."
-        CHROME_VERSION=$(google-chrome --version | grep -oP "\d+\.\d+\.\d+" | head -1)
-        echo "Versão do Chrome: $CHROME_VERSION"
-        MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d "." -f 1)
-        echo "Versão principal: $MAJOR_VERSION"
-        DRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$MAJOR_VERSION)
-        if [ -z "$DRIVER_VERSION" ]; then
-          echo "Erro: versão do ChromeDriver não encontrada para $MAJOR_VERSION"
-          exit 1
-        fi
-        echo "Versão do ChromeDriver: $DRIVER_VERSION"
-        wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip
-        if ! unzip chromedriver_linux64.zip; then
-          echo "Erro: falha ao descompactar ChromeDriver. Arquivo pode estar corrompido ou ausente."
-          exit 1
-        fi
-        mv chromedriver /usr/bin/chromedriver
-        chmod +x /usr/bin/chromedriver
-        '
-        
+
+      - echo "Instalando ChromeDriver versão fixa..."
+      - wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+      - unzip chromedriver_linux64.zip
+      - mv chromedriver /usr/bin/chromedriver
+      - chmod +x /usr/bin/chromedriver
+
   build:
     commands:
       - echo "Executando scraper..."
-      - python scraper.py
+      - find . -name scraper.py
+      - python $(find . -name scraper.py | head -1)
 
 artifacts:
   files:
