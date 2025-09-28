@@ -8,8 +8,10 @@ phases:
       - pip install -r requirements.txt
   build:
     commands:
+      - echo "📂 Estrutura de arquivos no CodeBuild:"
+      - ls -R
       - echo "➡️ Rodando pipeline local no CodeBuild"
-      - python test_scrap/test_scrap_local.py
+      - python aws_scrap_codebuild.py
 
 artifacts:
   files:

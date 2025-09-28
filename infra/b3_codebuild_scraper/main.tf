@@ -1,4 +1,4 @@
-resource "aws_codebuild_project" "scraper" {
+resource "aws_codebuild_project" "aws_scraper_codebuild" {
   name         = var.project_name
   description  = "Projeto de scraping da B3"
   service_role = var.role_arn
