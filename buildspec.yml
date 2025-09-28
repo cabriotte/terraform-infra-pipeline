@@ -11,7 +11,7 @@ phases:
       - echo "📂 Estrutura de arquivos no CodeBuild:"
       - ls -R
       - echo "➡️ Rodando pipeline local no CodeBuild"
-      - python aws_scrap_codebuild.py
+      - python main_codebuild.py
 
 artifacts:
   files:
