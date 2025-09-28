@@ -27,11 +27,15 @@ phases:
           exit 1
         fi
         echo "Versão do ChromeDriver: $DRIVER_VERSION"
-        wget https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
+        wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip
+        if ! unzip chromedriver_linux64.zip; then
+          echo "Erro: falha ao descompactar ChromeDriver. Arquivo pode estar corrompido ou ausente."
+          exit 1
+        fi
         mv chromedriver /usr/bin/chromedriver
         chmod +x /usr/bin/chromedriver
         '
+        
   build:
     commands:
       - echo "Executando scraper..."
