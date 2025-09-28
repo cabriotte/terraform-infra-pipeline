@@ -70,7 +70,7 @@ def processar_csv_para_parquet(caminho_csv, destino_base="/tmp/dados_b3"):
     return destino_particao
 
 def upload_to_s3(local_path, bucket_name, s3_prefix):
-    s3 = boto3.client('s3')
+    s3 = boto3.client('s3', region_name='sa-east-1')
 
     for root, dirs, files in os.walk(local_path):
         for file in files:

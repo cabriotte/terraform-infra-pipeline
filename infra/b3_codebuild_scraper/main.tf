@@ -10,7 +10,7 @@ resource "aws_codebuild_project" "scraper" {
   }
 
   environment {
-    compute_type    = "BUILD_GENERAL1_SMALL"  # ✅ compatível com Free Tier
+    compute_type    = "BUILD_GENERAL1_SMALL"  # compatível com Free Tier
     image           = "aws/codebuild/standard:7.0"
     type            = "LINUX_CONTAINER"
     privileged_mode = true
@@ -53,6 +53,7 @@ resource "aws_iam_role_policy" "codebuild_permissions" {
         Effect = "Allow",
         Action = [
           "s3:PutObject",
+          "s3:PutObjectAcl",
           "s3:GetObject",
           "s3:ListBucket"
         ],
