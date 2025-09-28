@@ -25,10 +25,18 @@ def baixar_csv_com_selenium(destino_dir="/tmp/dados_b3"):
     driver.get(url)
 
     time.sleep(5)  # aguarda carregamento da página
+
+    # 🔹 Item 1: log antes e depois do clique
+    print("Tentando localizar botão de download...")
     botao = driver.find_element(By.XPATH, "//a[contains(text(), 'Download')]")
+    print("Botão localizado, clicando...")
     botao.click()
 
-    time.sleep(5)  # aguarda download
+    # 🔹 Item 2: log do diretório de download
+    time.sleep(10)  # tempo extra para garantir download
+    print("Arquivos no diretório de download:")
+    print(os.listdir(destino_dir))
+
     driver.quit()
 
     for file in os.listdir(destino_dir):
@@ -82,4 +90,3 @@ def run_pipeline():
 
 if __name__ == "__main__":
     run_pipeline()
-
