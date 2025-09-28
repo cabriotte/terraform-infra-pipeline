@@ -3,23 +3,30 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.9
+      python: 3.11
     commands:
-      - echo "Instalando dependências Python..."
+      - echo "Instalando dependências..."
       - pip install -r requirements.txt
-
-      - echo "Instalando Chrome e ChromeDriver..."
-      - curl -O https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      - apt-get update && apt-get install -y ./google-chrome-stable_current_amd64.deb
-      - CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)
-      - wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}/chromedriver_linux64.zip || true
-      - unzip chromedriver_linux64.zip -d /usr/local/bin/
-      - chmod +x /usr/local/bin/chromedriver
-
-      - export CHROME_BIN=/usr/bin/google-chrome
-      - export PATH=$PATH:/usr/local/bin
+      - echo "Instalando Google Chrome..."
+      - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      - apt update && apt install -y ./google-chrome-stable_current_amd64.deb
+      - echo "Detectando versão do Chrome..."
+      - CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -1)
+      - MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d '.' -f 1)
+      - DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$MAJOR_VERSION")      
+      - echo "Versão do Chrome: $CHROME_VERSION"
+      - DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+      - echo "Versão do ChromeDriver: $DRIVER_VERSION"
+      - wget "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
+      - unzip chromedriver_linux64.zip
+      - mv chromedriver /usr/bin/chromedriver
+      - chmod +x /usr/bin/chromedriver
 
   build:
     commands:
       - echo "Executando scraper..."
       - python scraper.py
+
+artifacts:
+  files:
+    - '**/*'
