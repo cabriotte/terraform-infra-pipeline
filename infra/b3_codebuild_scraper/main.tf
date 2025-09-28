@@ -37,6 +37,7 @@ resource "aws_iam_role_policy" "codebuild_permissions" {
         Effect = "Allow",
         Action = [
           "codebuild:CreateReportGroup",
+          "codebuild:CreateProject",
           "codebuild:CreateReport",
           "codebuild:UpdateReport",
           "codebuild:BatchPutTestCases",
