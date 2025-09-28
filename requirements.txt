@@ -1,0 +1,5 @@
+selenium
+pandas
+pyarrow
+boto3
+chromedriver-autoinstaller
