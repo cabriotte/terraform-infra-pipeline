@@ -1,6 +1,6 @@
 bucket_name      = "dev-challenge2-files"
 bucket_arn       = "arn:aws:s3:::dev-challenge2-files"
-github_repo_url  = "https://github.com/cabriotte/terraform-infra-pipeline"
+github_repo_url  = "https://github.com/cabriotte/terraform-infra-pipeline.git"
 buildspec_path   = "buildspec.yml"
 role_name        = "github-actions-cabriotte-pipeline"
 role_arn         = "arn:aws:iam::196724157578:role/github-actions-cabriotte-pipeline"
