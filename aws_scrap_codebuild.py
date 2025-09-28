@@ -4,7 +4,7 @@ import sys
 # 🔹 Garante que a raiz do projeto esteja no PYTHONPATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aws_scraper_codebuild import (
+from aws_scrap_codebuild import (
     baixar_csv_com_selenium,
     processar_csv_para_parquet,
     upload_to_s3,
@@ -29,4 +29,5 @@ def main():
     print("📤 Arquivo disponível em:", caminho_s3)
 
 if __name__ == "__main__":
+
     main()
