@@ -3,30 +3,14 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.11
+      python: 3.13
     commands:
-      - echo "Instalando dependências..."
       - pip install -r requirements.txt
-
-      - echo "Instalando Google Chrome..."
-      - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      - apt update && apt install -y ./google-chrome-stable_current_amd64.deb
-
-      - echo "Instalando ChromeDriver versão fixa..."
-      - wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
-      - unzip chromedriver_linux64.zip
-      - mv chromedriver /usr/bin/chromedriver
-      - chmod +x /usr/bin/chromedriver
-
   build:
     commands:
-      - echo "Executando scraper..."
-      - find . -name scraper.py
-      - python $(find . -name scraper.py | head -1)
+      - echo "➡️ Rodando pipeline local no CodeBuild"
+      - python test_scrap/test_scrap_local.py
 
 artifacts:
   files:
     - '**/*'
-
-
-
