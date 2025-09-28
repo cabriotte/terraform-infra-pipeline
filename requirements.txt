@@ -3,3 +3,4 @@ pandas
 pyarrow
 boto3
 chromedriver-autoinstaller
+webdriver-manager
