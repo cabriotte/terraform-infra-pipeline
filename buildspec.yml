@@ -13,7 +13,7 @@ phases:
       - apt update && apt install -y ./google-chrome-stable_current_amd64.deb
 
       - echo "Instalando ChromeDriver versão fixa..."
-      - wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/117.0.5938.92/chromedriver_linux64.zip
+      - wget -O chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
       - unzip chromedriver_linux64.zip
       - mv chromedriver /usr/bin/chromedriver
       - chmod +x /usr/bin/chromedriver
@@ -26,4 +26,5 @@ phases:
 artifacts:
   files:
     - '**/*'
+
 
