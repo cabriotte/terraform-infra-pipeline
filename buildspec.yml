@@ -21,10 +21,12 @@ phases:
   build:
     commands:
       - echo "Executando scraper..."
-      - python scraper.py
+      - find . -name scraper.py
+      - python $(find . -name scraper.py | head -1)
 
 artifacts:
   files:
     - '**/*'
+
 
 
