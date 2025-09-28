@@ -74,7 +74,7 @@ def upload_to_s3(local_path, bucket_name, s3_prefix):
 
 def run_pipeline():
     print("Iniciando pipeline B3...")
-    bucket_name = os.getenv("BUCKET_NAME", "meu-bucket-b3-academy")
+    bucket_name = os.getenv("BUCKET_NAME", "dev-challenge2-files")
     caminho_csv = baixar_csv_com_selenium()
     caminho_parquet = processar_csv_para_parquet(caminho_csv)
     upload_to_s3(caminho_parquet, bucket_name=bucket_name, s3_prefix="b3/pregao")
