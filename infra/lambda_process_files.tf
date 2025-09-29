@@ -34,7 +34,7 @@ resource "aws_lambda_function" "challenge2-lambda-s3-process-files" {
   function_name = "processa_uploads"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "index.handler"
-  runtime       = "python3.9"
+  runtime       = "python3.13"
 
     filename         = "../lambda_function_payload.zip"
     source_code_hash = filebase64sha256("../lambda_function_payload.zip")
