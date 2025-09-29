@@ -7,7 +7,7 @@ def handler(event, context):
     print("Evento recebido do S3:")
     print(json.dumps(event))
 
-    response = glue.start_job_run(JobName="meu-glue-job")
+    response = glue.start_job_run(JobName="challenge2_file_proccess")
     print("Glue Job iniciado:", response["JobRunId"])
 
     return {
