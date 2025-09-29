@@ -13,8 +13,8 @@ resource "aws_s3_bucket_notification" "bucket_notify" {
         lambda_function_arn = aws_lambda_function.challenge2-lambda-s3-process-files.arn
         events              = ["s3:ObjectCreated:*"]
         # Opcional: filtros
-        ###filter_prefix       = "uploads/"
-        ###filter_suffix       = ".txt"
+        ###filter_prefix       = "b3/pregao"
+        ###filter_suffix       = ".parquet"
     }
 
     depends_on = [aws_lambda_permission.allow_s3]
