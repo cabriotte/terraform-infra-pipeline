@@ -61,7 +61,7 @@ def processar_csv_para_parquet(caminho_csv, destino_dir="./dados_b3_local"):
     os.makedirs(destino_dir, exist_ok=True)
 
     # pula a primeira linha (título), usa ; como separador
-    df = pd.read_csv(caminho_csv, sep=";", encoding="latin1", skiprows=1)
+    df = pd.read_csv(caminho_csv, sep=";", encoding="latin1", skiprows=1, header=0)
 
     # remove colunas vazias, se existirem
     df = df.dropna(axis=1, how="all")
@@ -82,4 +82,5 @@ def upload_to_s3(caminho_arquivo, bucket_name, s3_prefix=""):
     s3.upload_file(caminho_arquivo, bucket_name, chave_s3)
 
     print(f"✅ Upload concluído: s3://{bucket_name}/{chave_s3}")
+
     return f"s3://{bucket_name}/{chave_s3}"
