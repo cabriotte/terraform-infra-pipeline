@@ -60,8 +60,16 @@ def baixar_csv_com_selenium(destino_dir="./dados_b3_local"):
 def processar_csv_para_parquet(caminho_csv, destino_dir="./dados_b3_local"):
     os.makedirs(destino_dir, exist_ok=True)
 
+    with open(caminho_csv, encoding="latin1") as f:
+        linhas = [next(f) for _ in range(5)]
+        print("📄 Primeiras linhas do CSV:")
+        for linha in linhas:
+            print(linha.strip())
+
     # pula a primeira linha (título), usa ; como separador
     df = pd.read_csv(caminho_csv, sep=";", encoding="latin1", skiprows=1, header=0)
+    print("📊 Colunas lidas:", df.columns.tolist())
+    print(df.head())
 
     # remove colunas vazias, se existirem
     df = df.dropna(axis=1, how="all")
