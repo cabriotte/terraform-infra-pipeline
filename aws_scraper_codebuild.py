@@ -67,7 +67,15 @@ def processar_csv_para_parquet(caminho_csv, destino_dir="./dados_b3_local"):
             print(linha.strip())
 
     # pula a primeira linha (título), usa ; como separador
-    df = pd.read_csv(caminho_csv, sep=";", encoding="latin1", skiprows=1, header=0)
+    df = pd.read_csv(
+            caminho_csv,
+            sep=";",
+            encoding="latin1",
+            skiprows=1,
+            header=0,
+            index_col=False,
+            usecols=lambda col: col.strip() != ""
+            )
     print("📊 Colunas lidas:", df.columns.tolist())
     print(df.head())
 
