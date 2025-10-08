@@ -13,6 +13,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+import re
+import pytz
 
 def baixar_csv_com_selenium(destino_dir="./dados_b3_local"):
     # 🔹 Configurações do Chrome
@@ -32,6 +34,7 @@ def baixar_csv_com_selenium(destino_dir="./dados_b3_local"):
     try:
         # 1. Abre a página da B3
         driver.get("https://sistemaswebb3-listados.b3.com.br/indexPage/day/IBOV?language=pt-br")
+        print("🌐 Página carregada:", driver.title)
 
         # 2. Espera o botão de download ficar disponível
         # ⚠️ Ajuste o XPATH conforme o botão real da página
@@ -89,11 +92,24 @@ def processar_csv_para_parquet(caminho_csv, destino_dir="./dados_b3_local"):
     return caminho_parquet
 
 def upload_to_s3(caminho_arquivo, bucket_name, s3_prefix=""):
-    """Faz upload de um arquivo local para um bucket S3."""
+    """Faz upload de um arquivo local para um bucket S3, usando subpasta com data."""
     s3 = boto3.client("s3")
-
     nome_arquivo = os.path.basename(caminho_arquivo)
-    chave_s3 = f"{s3_prefix}/{nome_arquivo}" if s3_prefix else nome_arquivo
+
+    # 🔹 Extrai data do nome do arquivo
+    match = re.search(r"(\d{2})-(\d{2})-(\d{2})", nome_arquivo)
+    if match:
+        dia, mes, ano = match.groups()
+        tz_sp = pytz.timezone("America/Sao_Paulo")
+        ano_atual = datetime.now(tz_sp).year
+        prefixo_ano = str(ano_atual)[:2]
+        data_particao = f"{prefixo_ano}{ano}{mes}{dia}"
+    else:
+        tz_sp = pytz.timezone("America/Sao_Paulo")
+        data_particao = datetime.now(tz_sp).strftime("%Y%m%d")
+
+    # 🔹 Monta caminho no S3 com subpasta de data
+    chave_s3 = f"{s3_prefix}/{data_particao}/{nome_arquivo}" if s3_prefix else f"{data_particao}/{nome_arquivo}"
 
     s3.upload_file(caminho_arquivo, bucket_name, chave_s3)
 
