@@ -31,7 +31,7 @@ resource "aws_glue_job" "challenge2_glue_s3_process_files" {
 
   command {
     name            = "glueetl"
-    script_location = "s3://meu-bucket-scripts-glue/meu_script.py" # ajuste para o seu bucket real
+    script_location = "s3://aws-glue-assets-196724157578-sa-east-1/scripts/glue_process_files.py"
     python_version  = "3"
   }
 
