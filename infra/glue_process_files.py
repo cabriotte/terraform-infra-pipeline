@@ -18,7 +18,7 @@ job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
 # Caminho do arquivo Parquet no S3
-s3_path = "s3://dev-challenge2-files/b3/pregao/"
+s3_path = "s3://dev-challenge2-files/b3/pregao/*"
 df = spark.read.parquet(s3_path)
 
 # Renomeando as colunas
